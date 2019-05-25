@@ -20,10 +20,16 @@
       height: 100vh;
       object-fit: cover;
       object-position: center top;
-      transition: opacity 2s ease-in;
+      transition:
+        opacity 2s ease-in,
+        filter 2s ease-in;
     }
     img+img {
       filter: blur(0.7vmax);
+      opacity: 1;
+      will-change:
+        opacity,
+        filter;
     }
 
     h1 {
@@ -47,7 +53,14 @@
     }
   </style>
 
-  <img src="./themermaid.jpg" onload="document.querySelector('img:nth-of-type(2)').style.opacity=0">
+  <img
+    src="./themermaid.jpg"
+    onload="
+      var a=document.querySelector('img:nth-of-type(2)');
+      a.style.opacity=0;
+      a.style.filter='blur(0)'
+    "
+  >
   <img src="./themermaid.svg">
   <h1>Danie the mermaid</h1>
 </html>
