@@ -2,35 +2,43 @@
 <html lang="en">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" href="./fi.png">
   <title>Danie the mermaid</title>
 
   <style>
-    html {
+    html,
+    body {
       height: 100%;
+      margin: 0;
     }
 
-    body {
-      text-align: center;
-      margin: 0;
-      background: url(./themermaid.jpg);
-      background-size: cover;
-      background-position: 50% 0%;
-      height: 100%;
+    img {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      object-position: center top;
+      transition: opacity 2s ease-in;
+    }
+    img+img {
+      filter: blur(0.7vmax);
     }
 
     h1 {
-      text-shadow: 0 5px 15px black;
-      font-size: 9vw;
-      color: white;
-      background: rgba(0,0,0,0.4);
-      margin: 0;
       position: fixed;
       bottom: 0;
       left: 0;
       width: 100%;
+      margin: 0;
+      background: rgba(0,0,0,0.4);
+      color: white;
       text-align: center;
+      text-shadow: 0 5px 15px black;
+      font-size: 9vw;
     }
   </style>
 
+  <img src="./themermaid.jpg" onload="document.querySelector('img:nth-of-type(2)').style.opacity=0">
+  <img src="./themermaid.svg">
   <h1>Danie the mermaid</h1>
 </html>
