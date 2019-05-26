@@ -1,95 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="./favicon.png" />
+  <title>Danie the mermaid</title>
+  <link
+    href="https://fonts.googleapis.com/css?family=Amarante&display=swap&text=Daniethmrdl"
+    rel="stylesheet"
+  />
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
 
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<link rel="icon" href="./fi.png">
-<title>Danie the mermaid</title>
-<link href="https://fonts.googleapis.com/css?family=Amarante&display=swap&text=Daniethmrdl" rel="stylesheet">
-<style>
-	html,
-	body {
-		height: 100%;
-		margin: 0;
-	}
-	img {
-		position: fixed;
-		width: 100vw;
-		height: 100vh;
-		object-fit: cover;
-		object-position: center top;
-		transition:
-			opacity 2s ease-in,
-			filter 2s ease-in;
-	}
-	img+img {
-		filter: blur(0.7vmax);
-		opacity: 1;
-		will-change:
-			opacity,
-			filter;
-	}
-	h1,
-	a {
-		font-family: 'Amarante', cursive;
-		color: #fceec1;
-		text-shadow: 0 0.5vw 2vw #3d2c26;
-	}
-	h1 {
-		position: fixed;
-		bottom: 0;
-		left: 0;
-		width: 100%;
-		padding: 5vw 0;
-		margin: 0;
-		background:
-			linear-gradient(
-				179deg,
-				rgba(62, 43, 38, 0) 20%,
-				rgba(62, 43, 38, 0.6) 80%
-			);
-		text-align: center;
-		font-size: 11vw;
-	}
-	a {
-		position: fixed;
-		bottom: 0;
-		right: 0;
-		border: 0;
-		padding: 0.5vw 4vw;
-		font-size: 5vw;
-		text-decoration: none;
-	}
-	a:hover {
-		text-decoration: underline;
-	}
-</style>
+    img {
+      position: fixed;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      object-position: center top;
+      transition: opacity 1s ease-in, filter 1s ease-in;
+    }
 
-<img
-	src="./themermaid.jpg"
-	onload="
-		var a=document.querySelector('img:nth-of-type(2)');
-		a.style.opacity=0;
-		a.style.filter='blur(0)'
-	"
->
-<img src="./themermaid.svg">
-<h1>
-	Danie the mermaid
-</h1>
-<a href="mailto:danie@themerma.id">email me</a>
-<img
-	style="
-		position: fixed;
-		bottom: 0;
-		left: 0;
-		opacity: 0.3;
-		width: 18px;
-		height: 9px;
-		mix-blend-mode: multiply;
-	"
-	loading="lazy"
-	src="http://hitwebcounter.com/counter/counter.php?page=7100140&style=0007&nbdigits=3&type=ip&initCount=0"
->
+    img + img {
+      filter: blur(0.7vmax);
+      opacity: 1;
+      will-change: opacity, filter;
+    }
 
+    h1,
+    a {
+      font-family: 'Amarante', cursive;
+      color: #fceec1;
+      text-shadow: 0 0.5vw 2vw #3d2c26;
+    }
+
+    h1 {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      padding: 5vw 0;
+      margin: 0;
+      background: linear-gradient(
+        179deg,
+        rgba(62, 43, 38, 0) 20%,
+        rgba(62, 43, 38, 0.6) 80%
+      );
+      text-align: center;
+      font-size: 11vw;
+    }
+
+    a {
+      position: fixed;
+      bottom: 0;
+      right: 0;
+      border: 0;
+      padding: 0.5vw 4vw;
+      font-size: 5vw;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
+
+  <script>
+    var images = [
+      'pink-bikini',
+      'yellow-spot-bikini'
+    ];
+    var image = images[Math.floor(Math.random() * images.length)];
+    var svg = '<img src="./i/' + image + '.svg">';
+    var jpgOnload =
+      "var a = document.querySelector('img:nth-of-type(2)');"
+      + "a.style.opacity = 0;"
+      + "a.style.filter = 'blur(0.3vmax) saturate(3) brightness(3)';";
+    var jpg = '<img src="./i/' + image + '.jpg"'
+      + 'onload="' + jpgOnload + '">';
+
+    document.write(jpg + svg);
+  </script>
+  <h1>
+    Danie the mermaid
+  </h1>
+  <a href="mailto:danie@themerma.id">email me</a>
+  <img
+    style="
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      opacity: 0.3;
+      width: 18px;
+      height: 9px;
+      mix-blend-mode: multiply;
+    "
+    loading="lazy"
+    src="http://hitwebcounter.com/counter/counter.php?page=7100140&style=0007&nbdigits=3&type=ip&initCount=0"
+  />
 </html>
