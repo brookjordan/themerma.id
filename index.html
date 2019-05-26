@@ -20,7 +20,6 @@
       width: 100vw;
       height: 100vh;
       object-fit: cover;
-      object-position: center top;
       transition: opacity 1s ease-in, filter 1s ease-in;
     }
 
@@ -70,16 +69,16 @@
 
   <script>
     var images = [
-      'pink-bikini',
-      'yellow-spot-bikini'
+      ['pink-bikini', 'center 10%'],
+      ['yellow-spot-bikini', 'center 70%']
     ];
     var image = images[Math.floor(Math.random() * images.length)];
-    var svg = '<img src="./i/' + image + '.svg">';
+    var svg = '<img src="./i/' + image[0] + '.svg" style="object-position:' + image[1] + '">';
     var jpgOnload =
       "var a = document.querySelector('img:nth-of-type(2)');"
       + "a.style.opacity = 0;"
       + "a.style.filter = 'blur(0.3vmax) saturate(3) brightness(3)';";
-    var jpg = '<img src="./i/' + image + '.jpg"'
+    var jpg = '<img src="./i/' + image[0] + '.jpg" style="object-position:' + image[1] + '"'
       + 'onload="' + jpgOnload + '">';
 
     document.write(jpg + svg);
