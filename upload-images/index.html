@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mermaid image uploader</title>
+  <link href="https://fonts.googleapis.com/css2?family=Amarante&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    html {
+      background: #ddd;
+    }
+    body {
+      font-family: sans-serif;
+      font-family: 'Amarante', cursive;
+    }
+    form > div {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+    }
+    small {
+      font-weight: 400;
+      font-size: 0.6em;
+      font-family: sans-serif;
+    }
+    input,
+    textarea {
+      width: 100%;
+      text-indent: 10px;
+      font-family: sans-serif;
+    }
+    hr {
+      width: 100%;
+    }
+    button {
+      height: 50px;
+    }
+
+    .file {
+      border: 1px solid #aaa;
+      border-radius: 10px;
+      padding: 20px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3), inset 0 -1px 2px rgba(0,0,0,0.2);
+      background: white;
+    }
+    .file h2 {
+      margin: 0;
+    }
+    .file input {
+      display: none;
+    }
+
+    textarea {
+      font-size: 22px;
+    }
+
+    .submit {
+      height: auto;
+      border: 1px solid #aaa;
+      border-radius: 10px;
+      padding: 20px;
+      background: none;
+      font: inherit;
+      text-align: left;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.3), inset 0 -1px 2px rgba(0,0,0,0.2);
+      background: white;
+    }
+    .submit h2 {
+      margin: 0;
+    }
+  </style>
+</head>
+<body>
+  <h1>Image uploader</h1>
+  <form
+    action="https://api.cloudinary.com/v1_1/themermaid/upload"
+    method="post"
+    enctype="multipart/form-data"
+  >
+    <div>
+      <label class="file">
+        <h2>Click to choose an image</h2>
+        <input
+          name="file"
+          type="file"
+        />
+      </label>
+
+      <label>
+        <h2>
+          Caption:
+          <small>
+            (Requires
+            <strong><code>caption=</code></strong>
+            at the beginning)
+          </small>
+        </h2>
+        <textarea name="context" maxlength="1000" placeholder="caption=I look great here!">caption=</textarea>
+      </label>
+
+      <label>
+        <h2>
+          Tags:
+          <small>
+            (Comma sparated tag list)
+          </small>
+        </h2>
+        <textarea name="tags" placeholder="tag1,tag2"></textarea>
+      </label>
+
+      <hr>
+
+      <button class="submit"><h2>Click to submit</h2></button>
+    </div>
+
+    <input type="hidden" name="upload_preset" value="kxry4m17">
+    <input type="hidden" name="callback" value="https://themerma.id/upload-images/done/">
+
+    <!--
+    <input type="hidden" name="upload_preset" value="" />
+    <input type="hidden" name="callback" value="" />
+    <input type="hidden" name="public_id" value="" />
+    <input type="hidden" name="folder" value="" />
+    <input type="hidden" name="tags" value="" />
+    <input type="hidden" name="metadata" value="" />
+    <input type="hidden" name="face_coordinates" value="" />
+    <input type="hidden" name="custom_coordinates" value="" />
+    <input type="hidden" name="source" value="" />
+    -->
+  </form>
+
+  <!-- <script>
+    let formElt = document.querySelector("form");
+    let requiresEdit = false;
+    formElt.addEventListener("submit", event => {
+      formElt.style.display = "none";
+      if (!requiresEdit) {
+        event.preventDefault();
+      }
+    });
+  </script> -->
+</body>
+</html>
