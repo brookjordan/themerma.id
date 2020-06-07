@@ -147,7 +147,6 @@
     .image img {
       width: 100%;
       height: auto;
-      object-fit: cover;
       display: block;
     }
 
@@ -176,10 +175,30 @@
       content: "#";
       font-size: 0.7em;
     }
+
+    .image button {
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      border: 0;
+      background: pink;
+      font-weight: 900;
+      padding: 10px 10px;
+      border-radius: 5px;
+      float: right;
+      margin-top: 10px;
+      text-transform: uppercase;
+      width: 100%;
+      font-size: 13px;
+    }
   </style>
 </head>
 
 <body>
+  <noscript>
+    <img src="/i/pink-bikini.jpg" style="object-position:center 10%">
+  </noscript>
+
   <script>
     var images = [
       ['pink-bikini', 'center 10%'],
@@ -188,12 +207,12 @@
     ];
 
     var image = images[Math.floor(Math.random() * images.length)];
-    var svg = '<img src="./i/' + image[0] + '.svg" style="object-position:' + image[1] + '">';
+    var svg = '<img src="/i/' + image[0] + '.svg" style="object-position:' + image[1] + '">';
     var jpgOnload =
       "var a = document.querySelector('img:nth-of-type(2)');"
       + "a.style.opacity = 0;"
       + "a.style.filter = 'blur(0.3vmax) saturate(3) brightness(3)';";
-    var jpg = '<img src="./i/' + image[0] + '.jpg" style="object-position:' + image[1] + '"'
+    var jpg = '<img src="/i/' + image[0] + '.jpg" style="object-position:' + image[1] + '"'
       + 'onload="' + jpgOnload + '">';
 
     document.write(jpg + svg);
@@ -230,10 +249,7 @@
           imgContainer.append(imgLink);
 
           let img = new Image();
-          img.src = image.src.replace(
-            '/themermaid/image/upload/',
-            '/themermaid/image/upload/t_gallery_thumb/'
-          );
+          img.src = image.src;
           img.setAttribute("loading", "lazy");
           img.setAttribute("data-id", image.id);
           imgLink.append(img);
@@ -254,13 +270,35 @@
             imgLink.append(tags);
           }
 
+          let deleteButton = document.createElement("button");
+          deleteButton.innerHTML = "Delete image"
+          deleteButton.addEventListener("click", () => {
+            if (!confirm("Are you sure you want to delete this image?")) { return; }
+            fetch(requestURL, {
+              method: "DELETE",
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                imageIds: [image.id],
+              })
+            })
+            .then(error => {
+              imgContainer.remove();
+              alert("Image successfully deleted.");
+            })
+            .catch(error => { alert("There was a problem deleting that image. Please refresh the page."); });
+          });
+          imgContainer.append(deleteButton);
+
           imagesContainer.append(imgContainer);
         });
-        document.body.append(imagesContainer);
 
-        let scrollContainer = document.createElement("h2");
-        scrollContainer.textContent = "Scroll down";
-        document.body.prepend(scrollContainer);
+        document.querySelector("img").remove();
+        document.querySelector("img").remove();
+        document.querySelector("a").remove();
+        document.querySelector("h1").remove();
+        document.body.append(imagesContainer);
       }
     }());
   </script>

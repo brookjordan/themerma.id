@@ -17,6 +17,9 @@
       font-family: sans-serif;
       font-family: 'Amarante', cursive;
     }
+    form {
+      transition: opacity 0.5s;
+    }
     form > div {
       display: flex;
       flex-direction: column;
@@ -30,17 +33,22 @@
     input,
     textarea {
       width: 100%;
-      text-indent: 10px;
+      padding: 3px 10px;
       font-family: sans-serif;
-    }
-    hr {
-      width: 100%;
     }
     button {
       height: 50px;
     }
+    h2 {
+      margin: 0;
+    }
+    label:not(:first-child),
+    button {
+      margin-top: 30px;
+    }
 
     .file {
+      position: relative;
       border: 1px solid #aaa;
       border-radius: 10px;
       padding: 20px;
@@ -51,70 +59,108 @@
       margin: 0;
     }
     .file input {
-      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.00001;
+    }
+    .file + img {
+      height: 300px;
+      width: auto;
+      object-fit: contain;
+      object-position: 0 0;
     }
 
     textarea {
       font-size: 22px;
     }
 
-    .submit {
+    .share {
       height: auto;
-      border: 1px solid #aaa;
+      border: 1px solid #335b06;
       border-radius: 10px;
       padding: 20px;
       background: none;
       font: inherit;
       text-align: left;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.3), inset 0 -1px 2px rgba(0,0,0,0.2);
-      background: white;
+      box-shadow:
+        0 2px 5px rgba(0,0,0,0.3),
+        inset 0 -1px 2px rgba(0,0,0,0.2);
+      background-color: #559035;
+      color: white;
     }
-    .submit h2 {
+    .share h2 {
       margin: 0;
+    }
+
+    .tag-preview {
+      display: flex;
+      flex-wrap: wrap;
+      margin: -3px;
+    }
+    .tag-preview span {
+      background-color: white;
+      border-radius: 10px;
+      padding: 3px 10px;
+      padding-left: 8px;
+      margin: 3px;
+      font-family: sans-serif;
+      text-transform: uppercase;
+      font-weight: 800;
+      font-size: 14px;
+    }
+    .tag-preview span::before {
+      content: "#";
+      font-size: 12px;
+      font-weight: 400;
     }
   </style>
 </head>
 <body>
-  <h1>Image uploader</h1>
+  <h1>Add an image</h1>
   <form
     action="https://api.cloudinary.com/v1_1/themermaid/upload"
     method="post"
     enctype="multipart/form-data"
   >
     <div>
-      <label class="file">
-        <h2>Click to choose an image</h2>
+      <label class="file" id="file_label">
+        <h2>First, click here to choose an image</h2>
         <input
+          required
           name="file"
           type="file"
+          accept="image/*"
+          id="file_input"
         />
       </label>
 
       <label>
         <h2>
-          Caption:
-          <small>
+          Create a catchy caption:
+          <small id="requires_caption">
             (Requires
             <strong><code>caption=</code></strong>
             at the beginning)
           </small>
         </h2>
-        <textarea name="context" maxlength="1000" placeholder="caption=I look great here!">caption=</textarea>
+        <textarea id="context_input" name="context" maxlength="1000" placeholder="caption=I look great here!">caption=</textarea>
       </label>
 
       <label>
         <h2>
-          Tags:
+          Type some terriffic tags:
           <small>
-            (Comma sparated tag list)
+            (separated by commas)
           </small>
         </h2>
-        <textarea name="tags" placeholder="tag1,tag2"></textarea>
+        <textarea id="tags_input" name="tags" placeholder="tag1,tag2"></textarea>
       </label>
+      <div id="tag_preview" class="tag-preview"></div>
 
-      <hr>
-
-      <button class="submit"><h2>Click to submit</h2></button>
+      <button class="share"><h2>Share!</h2></button>
     </div>
 
     <input type="hidden" name="upload_preset" value="kxry4m17">
@@ -133,15 +179,75 @@
     -->
   </form>
 
-  <!-- <script>
+  <script>
     let formElt = document.querySelector("form");
-    let requiresEdit = false;
-    formElt.addEventListener("submit", event => {
-      formElt.style.display = "none";
-      if (!requiresEdit) {
-        event.preventDefault();
+    let fileInput = document.querySelector("#file_input");
+    let contextInput = document.querySelector("#context_input");
+    let tagsInput = document.querySelector("#tags_input");
+
+    formElt.addEventListener("submit", appendForm);
+    function appendForm(event) {
+      event.preventDefault();
+
+      if (!contextInput.value) {
+        if (!confirm("You didn’t add a caption, are you sure?")) {
+          return;
+        }
       }
-    });
-  </script> -->
+      formElt.style.pointerEvents = "none";
+      formElt.style.opacity = "0.2";
+
+      if (contextInput.value.trim()) {
+        if (!contextInput.value.trim().startsWith("caption=")) {
+          contextInput.value = `caption=${contextInput.value.trim()}`;
+        }
+      } else {
+        contextInput.remove();
+      }
+
+      if (tagsInput.value) {
+        tagsInput.value = tagsInput.value.split(/\n,/).map(a => a.trim()).join(",");
+      } else {
+        tagsInput.remove();
+      }
+
+      formElt.removeEventListener("submit", appendForm);
+      formElt.submit();
+    }
+
+    let fileLabel = document.querySelector("#file_label");
+    let uploadedImagePreview = new Image();
+    let uploadedImagePreviewAttached = false;
+    uploadedImagePreview.onload = () => {
+      uploadedImagePreview.width = uploadedImagePreview.naturalWidth;
+      uploadedImagePreview.height = uploadedImagePreview.naturalHeight;
+      fileLabel.querySelector("h2").textContent = "Looking great! Click to change image";
+    }
+    fileInput.onchange = event => {
+      uploadedImagePreview.src = URL.createObjectURL(event.target.files[0]);
+      URL.revokeObjectURL(uploadedImagePreview.src);
+      if (!uploadedImagePreviewAttached) {
+        fileLabel.after(uploadedImagePreview);
+        uploadedImagePreviewAttached = true;
+      }
+    };
+
+    let tagPreviewElt = document.querySelector("#tag_preview");
+    tagsInput.oninput = () => {
+      let tags = tagsInput.value.split(/[,\n]+/);
+      tagPreviewElt.innerHTML = "";
+      tags.forEach(tag => {
+        if (tag.trim()) {
+          let tagElt = document.createElement("span");
+          tagElt.textContent = tag.trim();
+          tagPreviewElt.append(tagElt);
+        }
+      });
+    };
+
+    contextInput.value = "";
+    contextInput.placeholder = contextInput.placeholder.slice(8);
+    document.querySelector("#requires_caption").remove();
+  </script>
 </body>
 </html>
