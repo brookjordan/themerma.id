@@ -28,8 +28,9 @@
   <script>
     let titleElt = document.querySelector("h1");
     let messageElt = document.querySelector("#results");
-    messageElt.innerHTML = 0;
+    let searchParams = new URL(location).searchParams;
 
+    messageElt.innerHTML = '';
     if (location.search.length === 0) {
       titleElt.innerText = "Why are you here?";
       messageElt.innerText = "Nothing happened. Go upload an image and you’ll be redirected here upon completion."
@@ -61,10 +62,17 @@
     }, {});
     let img = new Image();
     img.src = `https://res.cloudinary.com/themermaid/image/upload/v${version}/${public_id}.${format}`;
-    titleElt.innerText = "Image upload appears successful!";
-    messageElt.innerHTML = "If your image appears below, it was uploaded successfully!"
-      + (tags && tags.length ? `<br><strong>tags:</strong> ${tags.join(", ")}` : '');
-    messageElt.appendChild(img);
+
+    var error = searchParams.get('error')
+    if (error) {
+      titleElt.innerText = "Something went wrong";
+      messageElt.textContent = error;
+    } else {
+      titleElt.innerText = "Image upload appears successful!";
+      messageElt.innerHTML = "If your image appears below, it was uploaded successfully!"
+        + (tags && tags.length ? `<br><strong>tags:</strong> ${tags.join(", ")}` : '');
+      messageElt.appendChild(img);
+    }
   </script>
 </body>
 </html>
