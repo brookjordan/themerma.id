@@ -203,6 +203,12 @@
           return;
         }
       }
+
+      if (emojiRegExp.test(contextInput.value) || emojiRegExp.test(tagsInput.value)) {
+        if (!confirm("Using emoji will probably cause an error and fail. Do you still want to try?")) {
+          return;
+        }
+      }
       formElt.style.pointerEvents = "none";
       formElt.style.opacity = "0.2";
 
