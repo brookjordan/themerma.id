@@ -224,8 +224,8 @@
       fileLabel.querySelector("h2").textContent = "Looking great! Click to change image";
     }
     fileInput.onchange = event => {
-      uploadedImagePreview.src = URL.createObjectURL(event.target.files[0]);
       URL.revokeObjectURL(uploadedImagePreview.src);
+      uploadedImagePreview.src = URL.createObjectURL(event.target.files[0]);
       if (!uploadedImagePreviewAttached) {
         fileLabel.after(uploadedImagePreview);
         uploadedImagePreviewAttached = true;
