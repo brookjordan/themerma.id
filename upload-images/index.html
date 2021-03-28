@@ -206,7 +206,11 @@
       }
 
       if (tagsInput.value) {
-        tagsInput.value = tagsInput.value.split(/\n,/).map(a => a.trim()).join(",");
+        tagsInput.value = tagsInput.value
+          .split(/[\n,# ]/)
+          .map(a => a.trim())
+          .filter(a => a)
+          .join(",");
       } else {
         tagsInput.remove();
       }
