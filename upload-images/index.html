@@ -206,11 +206,7 @@
       }
 
       if (tagsInput.value) {
-        tagsInput.value = tagsInput.value
-          .split(/[\n,# ]/)
-          .map(a => a.trim())
-          .filter(a => a)
-          .join(",");
+        tagsInput.value = tagStringToTags(tagsInput.value).join(",");
       } else {
         tagsInput.remove();
       }
@@ -238,7 +234,7 @@
 
     let tagPreviewElt = document.querySelector("#tag_preview");
     tagsInput.oninput = () => {
-      let tags = tagsInput.value.split(/[,\n]+/);
+      let tags = tagStringToTags(tagsInput.value);
       tagPreviewElt.innerHTML = "";
       tags.forEach(tag => {
         if (tag.trim()) {
@@ -252,6 +248,13 @@
     contextInput.value = "";
     contextInput.placeholder = contextInput.placeholder.slice(8);
     document.querySelector("#requires_caption").remove();
+
+    function tagStringToTags(value) {
+      return value
+        .split(/[\n,# ]/)
+        .map(a => a.trim())
+        .filter(a => a)
+    }
   </script>
 </body>
 </html>
